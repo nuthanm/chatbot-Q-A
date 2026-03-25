@@ -193,3 +193,139 @@ The app will open automatically in your default browser at `http://localhost:850
 This project was built following concepts taught in the course:
 
 > 🎓 **[Generative AI for Beginners](https://deloittedevelopment.udemy.com/course/generative-ai-for-beginners-b/learn/)** — Udemy
+
+---
+
+## 🚀 Free Public Deployment Guide
+
+You can host this app publicly at **zero cost** using any of the platforms below.
+The app code requires **no changes** for any of these options.
+
+> ⚠️ **Important:** The **hosting** is free, but every question you ask goes through the **OpenAI API**, which is a paid service. You will need your own [OpenAI API key](https://platform.openai.com/account/api-keys) and will be billed by OpenAI for API usage (typically fractions of a cent per question on `gpt-3.5-turbo`).
+
+---
+
+### ✅ Option 1 — Streamlit Community Cloud (Recommended)
+
+The easiest option. Streamlit's own cloud platform is free, requires no Docker or server config, and is purpose-built for Streamlit apps.
+
+**Steps:**
+
+1. **Push your code to a public GitHub repository** (already done if you forked/cloned this repo).
+
+2. **Sign up** at [share.streamlit.io](https://share.streamlit.io) using your GitHub account.
+
+3. Click **"New app"** and fill in:
+   - **Repository:** `nuthanm/chatbot-Q-A` (or your fork)
+   - **Branch:** `main`
+   - **Main file path:** `app.py`
+
+4. **Add your OpenAI API key as a Secret:**
+   - Click **"Advanced settings"** → **"Secrets"**
+   - Paste the following (replace with your real key):
+     ```toml
+     OPENAI_API_KEY = "sk-..."
+     ```
+
+5. Click **"Deploy"**. Your app will be live at a URL like:
+   ```
+   https://<your-app-name>.streamlit.app
+   ```
+
+**Why this works without code changes:**
+Streamlit Community Cloud injects secrets as environment variables. `langchain_openai` reads `OPENAI_API_KEY` directly from the environment, so everything wires up automatically. The `load_dotenv()` call in `app.py` is harmlessly skipped (no `.env` file exists on the server).
+
+| Limit | Free tier |
+|---|---|
+| Apps | 3 public apps |
+| Memory | 1 GB RAM |
+| CPU | Shared |
+| Sleep | App sleeps after inactivity (wakes on first visit) |
+
+---
+
+### 🤗 Option 2 — Hugging Face Spaces (Alternative)
+
+Hugging Face Spaces also supports Streamlit apps for free with a persistent URL.
+
+**Steps:**
+
+1. **Sign up** at [huggingface.co](https://huggingface.co/join).
+
+2. Go to **Spaces** → **"Create new Space"** and choose:
+   - **SDK:** Streamlit
+   - **Visibility:** Public (required for free tier)
+
+3. **Push your files** to the Space repository (it's a Git repo):
+   ```bash
+   git remote add space https://huggingface.co/spaces/<your-username>/<space-name>
+   git push space main
+   ```
+
+4. **Add your OpenAI API key as a Secret:**
+   - In your Space → **Settings** → **Repository secrets**
+   - Add `OPENAI_API_KEY` = `sk-...`
+
+5. The Space will build automatically and give you a public URL:
+   ```
+   https://huggingface.co/spaces/<your-username>/<space-name>
+   ```
+
+| Limit | Free tier |
+|---|---|
+| CPU | 2 vCPU, 16 GB RAM |
+| Sleep | Pauses after 48 h of inactivity |
+| Storage | 50 GB |
+
+---
+
+### 🟣 Option 3 — Render.com (Alternative)
+
+Render can host any Python web service. It takes a few more steps but gives you more control.
+
+**Steps:**
+
+1. **Sign up** at [render.com](https://render.com) with your GitHub account.
+
+2. Click **"New +"** → **"Web Service"** → connect your GitHub repo.
+
+3. Fill in:
+   - **Runtime:** Python 3
+   - **Build command:** `pip install -r requirements.txt`
+   - **Start command:** `streamlit run app.py --server.port $PORT --server.address 0.0.0.0`
+
+4. Under **"Environment"**, add:
+   - Key: `OPENAI_API_KEY`  Value: `sk-...`
+
+5. Choose the **Free** instance type and click **"Create Web Service"**.
+
+Your app will be live at `https://<your-app-name>.onrender.com`.
+
+| Limit | Free tier |
+|---|---|
+| RAM | 512 MB |
+| CPU | Shared (0.1 CPU) |
+| Sleep | Spins down after 15 min inactivity (cold start ~30 s) |
+| Hours | 750 free hours/month |
+
+---
+
+### 🔑 Keeping Your API Key Safe
+
+No matter which platform you use, **never commit your real API key to Git**.
+
+- ✅ Use the platform's **Secrets / Environment Variables** panel (shown above for each option).
+- ✅ Keep `.env` in `.gitignore` (already done in this repo).
+- ❌ Never paste `sk-...` directly into `app.py` or `requirements.txt`.
+
+---
+
+### 📊 Platform Comparison
+
+| Platform | Setup Difficulty | Free Tier | Best For |
+|---|---|---|---|
+| **Streamlit Community Cloud** | ⭐ Easiest | ✅ Yes | Streamlit apps — zero config |
+| **Hugging Face Spaces** | ⭐⭐ Easy | ✅ Yes | AI/ML demos, larger RAM |
+| **Render.com** | ⭐⭐⭐ Medium | ✅ Yes (with sleep) | General Python web services |
+
+> 💡 **Recommendation:** Use **Streamlit Community Cloud** for the quickest, zero-friction deployment of this app.
