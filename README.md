@@ -137,6 +137,9 @@ The table below lists each concept used in this project with a brief description
    ```bash
    # Copy the template — never commit the real .env file
    cp .env.example .env
+
+   # for windows
+   copy .env.example .env
    ```
 
    Open `.env` in any editor and replace the placeholder with your actual key:
